@@ -85,7 +85,7 @@ head(dbReadTable(con, Id(schema="20774A", table = "CustomerTransactions")))
 dbWriteTable(con, Id(schema="DBIexampleMitra", table = "iris", iris, overwrite = TRUE))
 ```
 
-Some of our code could fail in that section so we used 'error=TRUE' to be able to carry on even if some of the code errored. Great for optional code or things with bad connections.
+Some of our code could fail in that section so we used 'error=TRUE' to be able to carry on even if some of the code error-ed. Great for optional code or things with bad connections.
 
 
 ## Exploratory
@@ -99,7 +99,7 @@ flights_tbl %>%
 ```
 
 
-Questions arising frmo the basic report:
+Questions arising from the basic report:
 
 1. Why is there a day with double the number of flights?
 2. We need to address the high correlation between time columns
@@ -107,17 +107,17 @@ Questions arising frmo the basic report:
 4. Do we need to do anything about missings or can we just remove the rows
 5. look up why there is a peak in middle of the month?
 
-Things to imlpement later in the workflow due to the EDA (explorer tree data analysis):
+Things to implement later in the workflow due to the EDA (explorer tree data analysis):
 
-1. We need to address the high correlation beteen time columns
+1. We need to address the high correlation between time columns
 2. We need to group low freq airlines carries
-3. Bivariate for anlyzing two things in realtion to each other
+3. Bi variate for analyzing two things in relation to each other
 
 ### Answering our questions
 
 > Why is there a day with double the number of flights?
 
-Are there dublicate rows?
+Are there duplicate rows?
 
 ```{r}
 flights_tbl %>% 
@@ -156,7 +156,7 @@ flights_tbl %>%
   ggplot(aes(day,y = n)) + geom_col()  # does not do any binning of the data
 
 ```
-Data is fine, the problem is in our visualization. Doing histogram, split continus numbers have to group them two in a day. the spike looks to be a problem but its not.
+Data is fine, the problem is in our visualization. Doing histogram, split continues numbers have to group them two in a day. the spike looks to be a problem but its not.
 
 Looks like the jump in the histogram is an artifact of binning the data. s'oh!
 
@@ -183,42 +183,42 @@ flights_tbl %>%
 
 Our options for sampling data with large class imbalance are:
 
-- Downsampling takes as many majority rows and there are minority rows
-    + No overfit from individual rows
+- Down sampling takes as many majority rows and there are minority rows
+    + No over fit from individual rows
     + Can drastically reduce training data size
 
-- Upsampling or sampling repeats minority rows until they meet some defined class ratio
-    + Risks overfitting
+- Up sampling or sampling repeats minority rows until they meet some defined class ratio
+    + Risks over fitting
     + Doesn't reduce training data set
     
-- Synthesising data makes extra records that are like the minority class
+- Synthesizing data makes extra records that are like the minority class
     + Does not reduce training set
-    + Avoids some of the overfit risk of upsampling
+    + Avoids some of the over fit risk of up sampling
     + Can weaken predictions if minority data is very similar to majority
     + synthpop is a package used. 
  
 
-We need to think about wheter we need to k-fold cross-validation explicitly.
+We need to think about whether we need to k-fold cross-validation explicitly.
 
 - Run the same model and assess robustness of the coefficients
 - We have an algorithm that needs explicit cross validation because it does not do it internally
 - When we are going to run lots of models with hyper-parameter tuning so the results are more consistent.
 
 We use bootstrapping when we want to fit a single model and ensure the results are robust. 
-This will often do many more iterations than k-fold cross validation, making it better in cases where there is reletively small amounts of data. 
+This will often do many more iterations than k-fold cross validation, making it better in cases where there is relatively small amounts of data. 
 (Bootstrapping is used to arrive at a single robust model)
 
 Packages we can use for sampling include:
 
-- modelr which facilitates boostrap and crossvalidation strategies 
-- rsample allows us to bootstrap and perform a wide variety of crossvalidation tasks
-- recipes allows us to upsample and downsample
-- synthpop allows us to build synthesised samples
+- modelr which facilitates boostrap and cross validation strategies 
+- rsample allows us to bootstrap and perform a wide variety of cross validation tasks
+- recipes allows us to up sample and down sample
+- synthpop allows us to build synthesized samples
 
     
 More notes:
-- we have many undelays (= majority of the data), how can we predict when the flights are late, now it will always say that the lflights are on time... what to do?
-- Downsampling = if we have alot of data, take randome small sample of the not delayed majority class data and still have a huge amount of data, having more data of delayed. 
+- we have many underlays (= majority of the data), how can we predict when the flights are late, now it will always say that the flights are on time... what to do?
+- Down sampling = if we have alot of data, take randome small sample of the not delayed majority class data and still have a huge amount of data, having more data of delayed. 
 - upsampling = a model to predict 3 % that are delay, repeat those rows which are delays, known minority class rows, until we have 15 - 20% delays.
 - synthesize data, is the third option
 
@@ -280,6 +280,7 @@ basic_fe %>%
   step_zv(all_predictors()) %>% # remove parameters with near zero variance
   step_nzv(all_predictors()) %>%  # drop param. if freq is less than 5 % that has differences
   step_naomit(all_predictors()) %>% #remove recors that are NA, because they are only 3%
+  step_naomit(all_outcomes()) %>%
   step_other(all_nominal(), threshold = 0.03) ->  # if they have values with low incident rate to a low category, other category. nominal = categorical variable
  # step_discretize(month, day) ->  #convert from numbers to category variables
   colscleaned_fe
@@ -331,8 +332,96 @@ numscleaned_fe %>%
 ```
 
 
+## Building models
+Decide which types of models you want to consider -- perhaps using Microsoft's lovely [cheat sheet](https://docs.microsoft.com/en-us/azure/machine-learning/studio/algorithm-cheat-sheet). Then determine if any need any special processing to the data beyond what you have done so far.
+
+
+### A basic logistic regression model
+```{r}
+glm_unbal <- glm(was_delayed~ . -1,"binomial", data = train_prep1) # "was_delayed"" = input variable AND "~ ."" = output variable
+glm_bal <- glm(was_delayed~ . -1, "binomial", data = train_prep2) # general linearized model, general regression model
+
+```
+Then we can see how these models are constructed and how they perform
+
+```{r}
+library(broom)
+glance(glm_unbal)  # model obj linear model, coeff values, how we change prop of an outcome...
+# BIC = how much information we are collecting
+# logLik = measure of what predicted and what happened ?? come back to this later
+
+
+```
+
+
+Get the coefficients of the model
+```{r}
+tidy(glm_unbal)
+```
+
+Takes original data and suppliment with predicte data and predicted error and associate with those...????
+```{r}
+head(augment(glm_unbal))
+```
+
+
+Plot predictive's vs actuals
+
+
+```{r}
+glm_unbal %>% 
+  augment() %>% 
+  ggplot(aes(x=.fitted, group=was_delayed, fill= was_delayed)) + 
+  geom_density(alpha=0.5) + 
+  geom_vline(aes(xintercept=0))
+
+# if its x>0, then its more than 50 % chance that is not delayed. 
+# if x<0 then its more than 50 % chance that its delayed.
+
+
+```
+
+#### Prep and predict on test data
+```{r}
+test_raw %>% 
+  bake(numscleaned_fe, .) %>% 
+  modelr:: add_predictions(glm_unbal,var = "glm_unbal") ->
+  test_scored
+
+```
+
+```{r}
+test_scored %>% 
+  ggplot(aes(x=glm_unbal, group=was_delayed, fill= was_delayed)) + 
+  geom_density(alpha=0.5) + 
+  geom_vline(aes(xintercept=0))
+
+# if its x>0, then its more than 50 % chance that is not delayed. 
+# if x<0 then its more than 50 % chance that its delayed.
+
+
+```
+
+
+But how many did we get right etc?
+
+
+```{r}
+library(yardstick)
+test_scored %>% 
+  mutate(glm_unbal_class = as.factor(ifelse(glm_unbal<0, "Delayed", "Not Delayed"))) %>% 
+  conf_mat(was_delayed, glm_unbal_class)
 
 
 
+```
 
+
+```{r}
+test_scored %>% 
+  mutate(glm_unbal_class = as.factor(
+    ifelse(glm_unbal<0, "Delayed", "Not Delayed"))) %>% 
+  accuracy(was_delayed, glm_unbal_class)
+
+```
 
