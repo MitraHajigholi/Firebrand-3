@@ -1,24 +1,26 @@
-Applied Data Science
-================
+---
+title: "Applied Data Science"
+output: github_document
+---
 
-Packages
---------
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
+## Packages
 Packages we'll look at today:
 
--   odbc / readxl / readr / dbplyr for data access
--   tidyverse for data manipulation
--   DataExplorer for providing of our data
--   modelr / rsamples for sampling strategy
--   recipes for performing feature engineering
--   glmnet / glmnetUtils / h2o / FFTrees for building models
--   yardstick / broom for evaluation
--   rmarkdown for documentation
+- odbc / readxl / readr / dbplyr for data access
+- tidyverse for data manipulation
+- DataExplorer for providing of our data
+- modelr / rsamples for sampling strategy
+- recipes for performing feature engineering
+- glmnet / glmnetUtils / h2o / FFTrees for building models
+- yardstick / broom for evaluation
+- rmarkdown for documentation
 
-working with databases
-----------------------
-
-``` r
+## Working with databases
+```{r}
 library(DBI)  # talk with databases, a driver
 library(odbc) # allows us to talk with DBI drivers
 
@@ -36,3 +38,4 @@ con <- dbConnect(odbc(),
                  uid = uid,
                  pwd = pwd)
 ```
+
