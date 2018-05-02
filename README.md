@@ -8,7 +8,7 @@ Packages we'll look at today:
 
 -   odbc / readxl / readr / dbplyr for data access
 -   tidyverse for data manipulation
--   DataExplorer for providing of our data
+-   DataExplorer for helping us providing our EDA of the data
 -   modelr / rsamples for sampling strategy
 -   recipes for performing feature engineering
 -   glmnet / glmnetUtils / h2o / FFTrees for building models
@@ -289,3 +289,175 @@ flights_tbl %>%
     ## 'from' must be a finite number
 
 ![](README_files/figure-markdown_github/unnamed-chunk-9-1.png)
+
+### Sampling
+
+Our options for sampling data with large class imbalance are:
+
+-   Downsampling takes as many majority rows and there are minority rows
+    -   No overfit from individual rows
+    -   Can drastically reduce training data size
+-   Upsampling or sampling repeats minority rows until they meet some defined class ratio
+    -   Risks overfitting
+    -   Doesn't reduce training data set
+-   Synthesising data makes extra records that are like the minority class
+    -   Does not reduce training set
+    -   Avoids some of the overfit risk of upsampling
+    -   Can weaken predictions if minority data is very similar to majority
+    -   synthpop is a package used.
+
+We need to think about wheter we need to k-fold cross-validation explicitly.
+
+-   Run the same model and assess robustness of the coefficients
+-   We have an algorithm that needs explicit cross validation because it does not do it internally
+-   When we are going to run lots of models with hyper-parameter tuning so the results are more consistent.
+
+We use bootstrapping when we want to fit a single model and ensure the results are robust. This will often do many more iterations than k-fold cross validation, making it better in cases where there is reletively small amounts of data. (Bootstrapping is used to arrive at a single robust model)
+
+Packages we can use for sampling include:
+
+-   modelr which facilitates boostrap and crossvalidation strategies
+-   rsample allows us to bootstrap and perform a wide variety of crossvalidation tasks
+-   recipes allows us to upsample and downsample
+-   synthpop allows us to build synthesised samples
+
+More notes: - we have many undelays (= majority of the data), how can we predict when the flights are late, now it will always say that the lflights are on time... what to do? - Downsampling = if we have alot of data, take randome small sample of the not delayed majority class data and still have a huge amount of data, having more data of delayed. - upsampling = a model to predict 3 % that are delay, repeat those rows which are delays, known minority class rows, until we have 15 - 20% delays. - synthesize data, is the third option
+
+Hyperparameter tunings - Use training data - Split our data into training and test set. 4/5 split,
+
+Need to test different models to select the one that gives the best result.
+
+### Install
+
+from github, it is CRAN but we have an earlier version
+======================================================
+
+run in console &gt;
+===================
+
+install.packages("devtools")
+============================
+
+devtools::install\_github("topepo/recipes")
+===========================================
+
+### Practical
+
+First we need to split our data into test and train.
+
+``` r
+flights_tbl %>% 
+  as_data_frame() ->
+  flights
+
+flights %>% 
+  mutate(was_delayed = arr_delay>5)  -> # flight delayed with 5 min
+  flights
+
+flights %>% 
+  modelr::resample_partition(c(train=0.7, test =0.3)) ->
+  splits
+
+splits %>% 
+  pluck("train") %>% 
+  as_data_frame() ->
+  train_raw
+
+splits %>% 
+  pluck("test") %>% 
+  as_data_frame() ->
+  test_raw
+```
+
+Druring the investigation, we will look at the impact of upsampling. We will see it in action in a bit. First prepping our basic features!
+
+``` r
+library(recipes)
+```
+
+    ## Loading required package: broom
+
+    ## 
+    ## Attaching package: 'recipes'
+
+    ## The following object is masked from 'package:stringr':
+    ## 
+    ##     fixed
+
+    ## The following object is masked from 'package:stats':
+    ## 
+    ##     step
+
+``` r
+basic_fe <- recipe(train_raw, was_delayed ~ .)  # ~ . = by everything to predict was_delayed data # feature engineering
+
+basic_fe %>% 
+  step_rm(ends_with("time"), ends_with("delay"), 
+          year, minute, time_hour, tailnum, flight) %>% 
+#  step_corr(all_predictors()) %>%  # remove highly corr variables
+  step_zv(all_predictors()) %>% # remove parameters with near zero variance
+  step_nzv(all_predictors()) %>%  # drop param. if freq is less than 5 % that has differences
+  step_naomit(all_predictors()) %>% #remove recors that are NA, because they are only 3%
+  step_other(origin, dest, carrier) %>%  # if they have values with low incident rate to a low category, other category.
+  step_discretize(month, day) ->  #convert from numbers to category variables
+  colscleaned_fe
+  
+colscleaned_fe
+```
+
+    ## Data Recipe
+    ## 
+    ## Inputs:
+    ## 
+    ##       role #variables
+    ##    outcome          1
+    ##  predictor         19
+    ## 
+    ## Operations:
+    ## 
+    ## Delete terms ends_with("time"), ends_with("delay"), ...
+    ## Zero variance filter on all_predictors()
+    ## Sparse, unbalanced variable filter on all_predictors()
+    ## Removing rows with NA values in all_predictors()
+    ## Collapsing factor levels for origin, dest, carrier
+    ## Dummy variables from month, day
+
+``` r
+colscleaned_fe <- prep(colscleaned_fe, verbose = TRUE)
+```
+
+    ## oper 1 step rm [training] 
+    ## oper 2 step zv [training] 
+    ## oper 3 step nzv [training] 
+    ## oper 4 step naomit [training] 
+    ## oper 5 step other [training] 
+    ## oper 6 step discretize [training]
+
+    ## Warning: Data not binned; too few unique values per bin. Adjust
+    ## 'min_unique' as needed
+
+    ## Warning: Data not binned; too few unique values per bin. Adjust
+    ## 'min_unique' as needed
+
+``` r
+colscleaned_fe
+```
+
+    ## Data Recipe
+    ## 
+    ## Inputs:
+    ## 
+    ##       role #variables
+    ##    outcome          1
+    ##  predictor         19
+    ## 
+    ## Training data contained 235743 data points and 6649 incomplete rows. 
+    ## 
+    ## Operations:
+    ## 
+    ## Variables removed dep_time, sched_dep_time, arr_time, ... [trained]
+    ## Zero variance filter removed no terms [trained]
+    ## Sparse, unbalanced variable filter removed no terms [trained]
+    ## Removing rows with NA values in all_predictors()
+    ## Collapsing factor levels for origin, dest, carrier [trained]
+    ## Dummy variables from month, day [trained]
