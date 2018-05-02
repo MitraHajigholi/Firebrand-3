@@ -183,3 +183,109 @@ flights_tbl %>%
   as_data_frame() %>% 
   DataExplorer::GenerateReport()
 ```
+
+Questions arising frmo the basic report:
+
+1.  Why is there a day with double the number of flights?
+2.  We need to address the high correlation between time columns
+3.  Why is there negative correlation between 'flight' and 'distance'?
+4.  Do we need to do anything about missings or can we just remove the rows
+5.  look up why there is a peak in middle of the month?
+
+Things to imlpement later in the workflow due to the EDA (explorer tree data analysis):
+
+1.  We need to address the high correlation beteen time columns
+2.  We need to group low freq airlines carries
+3.  Bivariate for anlyzing two things in realtion to each other
+
+### Answering our questions
+
+> Why is there a day with double the number of flights?
+
+Are there dublicate rows?
+
+``` r
+flights_tbl %>% 
+  filter(day == 15) %>% 
+  distinct()  %>%  
+  summarise(n())  %>%  # count the data
+  as_data_frame() ->  # force it to give it the content and not sql code
+  distict_count  # create a uniqe list of using distict count
+  
+  # get all rows if dublicate or not
+flights_tbl %>% 
+  filter(day == 15) %>% 
+  summarise(n())  %>%  
+  as_data_frame() ->
+  row_count 
+
+# if the sructure and values are the same return true,
+identical(row_count, distict_count) #one row per observed flight?
+```
+
+    ## [1] TRUE
+
+But are the number of rows unusual?
+
+``` r
+library(ggplot2)
+flights_tbl %>% 
+  group_by(day) %>% 
+  summarise(n = n(), n_distinct(flight)) %>% 
+  arrange(day)
+```
+
+    ## # Source:     lazy query [?? x 3]
+    ## # Database:   Microsoft SQL Server
+    ## #   12.00.0300[dbo@fbmcsads/WideWorldImporters-Standard]
+    ## # Ordered by: day
+    ##      day     n `n_distinct(flight)`
+    ##    <int> <int>                <int>
+    ##  1     1 11036                 2532
+    ##  2     2 10808                 2542
+    ##  3     3 11211                 2491
+    ##  4     4 11059                 2449
+    ##  5     5 10858                 2463
+    ##  6     6 11059                 2484
+    ##  7     7 10985                 2427
+    ##  8     8 11271                 2436
+    ##  9     9 10857                 2496
+    ## 10    10 11227                 2504
+    ## # ... with more rows
+
+``` r
+## to plot the data instead : 
+flights_tbl %>% 
+  group_by(day) %>% 
+  summarise(n = n(), n_distinct(flight)) %>%
+  as_data_frame() %>% 
+  ggplot(aes(day,y = n)) + geom_col()  # does not do any binning of the data
+```
+
+![](README_files/figure-markdown_github/unnamed-chunk-8-1.png) Data is fine, the problem is in our visualization. Doing histogram, split continus numbers have to group them two in a day. the spike looks to be a problem but its not.
+
+Looks like the jump in the histogram is an artifact of binning the data. s'oh!
+
+### Bivariate analysis
+
+``` r
+flights_tbl %>% 
+  select_if(is.numeric) %>% 
+  as_data_frame() %>%   # need to convert to a data frame from sql data
+  gather(col,val,-dep_delay) %>% # dont pivot the dep_delay column, gather and pivot creates the variables col and val
+  filter(col!= "arr_delay", dep_delay < 500) %>%  # filter out arr_delay to see better result
+  ggplot(aes(x=val, y=dep_delay)) + 
+  #geom_point() +  # this takes long time since its plotting row by row
+  geom_bin2d() +
+  facet_wrap(~col, scales = "free") + # takes different parts of our data to produce them as charts
+  scale_fill_gradientn(colours= viridisLite::viridis(256, option = "D"))
+```
+
+    ## Applying predicate on the first 100 rows
+
+    ## Warning: Removed 1631 rows containing non-finite values (stat_bin2d).
+
+    ## Warning: Computation failed in `stat_bin2d()`:
+    ## 'from' must be a finite number
+
+![](README_files/figure-markdown_github/unnamed-chunk-9-1.png)
