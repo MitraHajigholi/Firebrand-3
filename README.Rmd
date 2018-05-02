@@ -425,3 +425,82 @@ test_scored %>%
 
 ```
 
+
+### A glmnet for feature selection
+Use regularization to smooth results by modifying coefficients of variables.
+```{r}
+library(glmnetUtils)
+
+# what scaling values, how good the models are as a result.
+glmnet_unbal <- glmnet(was_delayed~.,
+                       train_prep1,
+                       family="binomial",
+                       alpha = 0.5,  # some l1 and ome l2
+                       intercept = FALSE)
+
+glmnet_unbal
+```
+
+```{r}
+glance(glmnet_unbal) # returns key metrics of the models fit 
+
+```
+
+
+
+
+
+How many variables in the model at different levels of regularization?
+```{r}
+# scale of the coeff at each of the points
+plot(glmnet_unbal, label = TRUE)  
+
+```
+
+What level of variance if explained at each step?
+```{r}
+library(glmnetUtils)
+set.seed(1050104) # reproduce random
+glmnet_unbal_cv <- cv.glmnet(was_delayed~.,
+                             train_prep1,
+                             family="binomial",  #distribution family
+                             alpha = 0.5)
+```
+
+
+How different weights perform?
+
+```{r}
+plot(glmnet_unbal_cv)
+# least peanilized, variation, 
+```
+
+Exctract coeff
+```{r}
+
+coef(glmnet_unbal_cv, s = "lambda.min")
+#neg. values prediction of how delayed
+#pos. values prediction of how not delayed it will be
+
+```
+
+
+```{r}
+coef(glmnet_unbal_cv, s="lambda.min") #returns the best model
+```
+
+
+```{r}
+test_scored$glmnet_unbal_cv <- as.vector(predict(glmnet_unbal_cv, 
+                                                 test_scored,
+                                                 na.action = na.pass))
+```
+
+
+```{r}
+test_scored %>% 
+  ggplot(aes(x=glmnet_unbal_cv, group=was_delayed, fill= was_delayed)) + 
+  geom_density(alpha=0.5) + 
+  geom_vline(aes(xintercept=0))
+```
+

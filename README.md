@@ -446,7 +446,7 @@ colscleaned_fe
     ##    outcome          1
     ##  predictor         20
     ## 
-    ## Training data contained 235743 data points and 6627 incomplete rows. 
+    ## Training data contained 235743 data points and 6641 incomplete rows. 
     ## 
     ## Operations:
     ## 
@@ -496,7 +496,7 @@ numscleaned_fe
     ##    outcome          1
     ##  predictor         20
     ## 
-    ## Training data contained 235743 data points and 6627 incomplete rows. 
+    ## Training data contained 235743 data points and 6641 incomplete rows. 
     ## 
     ## Operations:
     ## 
@@ -546,8 +546,8 @@ library(broom)
 glance(glm_unbal)  # model obj linear model, coeff values, how we change prop of an outcome...
 ```
 
-    ##   null.deviance df.null    logLik      AIC      BIC deviance df.residual
-    ## 1      118009.7   85126 -49955.19 100014.4 100500.7 99910.39       85074
+    ##   null.deviance df.null   logLik      AIC      BIC deviance df.residual
+    ## 1      117794.8   84971 -49709.8 99523.61 100009.8 99419.61       84919
 
 ``` r
 # BIC = how much information we are collecting
@@ -560,59 +560,59 @@ Get the coefficients of the model
 tidy(glm_unbal)
 ```
 
-    ##         term    estimate  std.error     statistic      p.value
-    ## 1     month1  0.29425891 4.20831411   0.069923228 9.442548e-01
-    ## 2    month10  0.63502820 4.20820993   0.150902215 8.800529e-01
-    ## 3    month11  0.52336367 4.20814728   0.124369143 9.010230e-01
-    ## 4    month12 -0.34873287 4.20819761  -0.082869890 9.339550e-01
-    ## 5     month2  0.12649737 4.20810752   0.030060393 9.760189e-01
-    ## 6     month3  0.26077905 4.20822706   0.061968864 9.505876e-01
-    ## 7     month4 -0.02498763 4.20821342  -0.005937825 9.952623e-01
-    ## 8     month5  0.38984130 4.20814166   0.092639777 9.261897e-01
-    ## 9     month6 -0.15368069 4.20808978  -0.036520297 9.708675e-01
-    ## 10    month7 -0.18594769 4.20827421  -0.044186210 9.647560e-01
-    ## 11    month8  0.14146003 4.20824519   0.033614968 9.731842e-01
-    ## 12    month9  0.94538519 4.20830024   0.224647754 8.222533e-01
-    ## 13 carrierAA  0.38744395 0.06350483   6.101015565 1.053966e-09
-    ## 14 carrierB6 -0.08142250 0.06301651  -1.292082080 1.963287e-01
-    ## 15 carrierDL  0.44842990 0.06348505   7.063551707 1.622998e-12
-    ## 16 carrierEV -0.25302041 0.07610555  -3.324598395 8.854598e-04
-    ## 17 carrierMQ -0.25932517 0.06967655  -3.721843135 1.977739e-04
-    ## 18 carrierUA  0.12494876 0.06450648   1.936995468 5.274590e-02
-    ## 19 carrierUS  0.39278124 0.07148829   5.494344149 3.921651e-08
-    ## 20 carrierWN -0.83419714 0.32524851  -2.564799241 1.032355e-02
-    ## 21 originJFK  0.01005491 0.02445096   0.411227446 6.809058e-01
-    ## 22 originLGA -0.02080014 0.02357197  -0.882409937 3.775552e-01
-    ## 23   destBOS  0.77837976 0.87259564   0.892028022 3.723779e-01
-    ## 24   destCLT  0.15203400 0.20856867   0.728939766 4.660385e-01
-    ## 25   destFLL  0.11908087 0.22038350   0.540334791 5.889662e-01
-    ## 26   destLAX  0.28799439 0.75090473   0.383529862 7.013269e-01
-    ## 27   destMCO  0.32567151 0.14197536   2.293859363 2.179858e-02
-    ## 28   destMIA  0.25095647 0.23314121   1.076414011 2.817421e-01
-    ## 29   destORD  0.33386411 0.04519274   7.387560808 1.495467e-13
-    ## 30   destSFO  0.15209325 0.77795265   0.195504508 8.449980e-01
-    ## 31  distance  0.07579355 0.63508759   0.119343461 9.050033e-01
-    ## 32    hour11  0.11978778 0.05117889   2.340570141 1.925432e-02
-    ## 33    hour12 -0.13045649 0.04626323  -2.819874188 4.804248e-03
-    ## 34    hour13 -0.19088179 0.04620127  -4.131526580 3.603620e-05
-    ## 35    hour14 -0.30148700 0.04637223  -6.501455767 7.954643e-11
-    ## 36    hour15 -0.53679355 0.04353068 -12.331385694 6.138198e-35
-    ## 37    hour16 -0.50112002 0.04563982 -10.979887026 4.775206e-28
-    ## 38    hour17 -0.66003779 0.04357935 -15.145656441 8.094237e-52
-    ## 39    hour18 -0.75934978 0.04508545 -16.842456112 1.191852e-63
-    ## 40    hour19 -0.66157746 0.04585553 -14.427429117 3.478056e-47
-    ## 41    hour20 -0.68078456 0.04797995 -14.188937989 1.072710e-45
-    ## 42    hour21 -0.63885034 0.05168246 -12.361067183 4.244836e-35
-    ## 43    hour22 -0.87196712 0.13561651  -6.429653064 1.278955e-10
-    ## 44    hour23 -0.97042535 0.27770119  -3.494494727 4.749600e-04
-    ## 45     hour5  0.54341998 0.11906215   4.564170846 5.014723e-06
-    ## 46     hour6  0.39180333 0.04441829   8.820766535 1.136788e-18
-    ## 47     hour7  0.36107780 0.04702018   7.679209127 1.600737e-14
-    ## 48     hour8  0.18133259 0.04584929   3.954970596 7.654407e-05
-    ## 49     hour9  0.14471633 0.04616087   3.135043460 1.718287e-03
-    ## 50     week1 -0.34627908 0.02365766 -14.637077716 1.629216e-48
-    ## 51     week2 -0.10908877 0.02391284  -4.561932473 5.068495e-06
-    ## 52     week3 -0.16670648 0.02206819  -7.554152605 4.215956e-14
+    ##         term      estimate  std.error    statistic      p.value
+    ## 1     month1 -0.8748308528 4.21182498  -0.20770826 8.354568e-01
+    ## 2    month10 -0.5121757317 4.21171527  -0.12160740 9.032100e-01
+    ## 3    month11 -0.6533975815 4.21171624  -0.15513808 8.767125e-01
+    ## 4    month12 -1.5249247465 4.21163478  -0.36207431 7.172965e-01
+    ## 5     month2 -1.0202423568 4.21170369  -0.24223982 8.085943e-01
+    ## 6     month3 -0.9161618717 4.21180553  -0.21752236 8.278013e-01
+    ## 7     month4 -1.2110548745 4.21165614  -0.28754837 7.736925e-01
+    ## 8     month5 -0.7697390847 4.21172594  -0.18276096 8.549856e-01
+    ## 9     month6 -1.3190879067 4.21155168  -0.31320710 7.541233e-01
+    ## 10    month7 -1.3720486575 4.21179225  -0.32576361 7.446032e-01
+    ## 11    month8 -1.0193926776 4.21175219  -0.24203529 8.087528e-01
+    ## 12    month9 -0.2167358695 4.21182964  -0.05145884 9.589599e-01
+    ## 13 carrierAA  0.4229357925 0.06339111   6.67184739 2.526032e-11
+    ## 14 carrierB6 -0.0777286762 0.06287384  -1.23626419 2.163604e-01
+    ## 15 carrierDL  0.4618461385 0.06336442   7.28873029 3.128897e-13
+    ## 16 carrierEV -0.2384537271 0.07614615  -3.13152687 1.738999e-03
+    ## 17 carrierMQ -0.2933592895 0.06957235  -4.21660725 2.480054e-05
+    ## 18 carrierUA  0.1551365789 0.06438702   2.40943884 1.597707e-02
+    ## 19 carrierUS  0.3704617785 0.07146977   5.18347526 2.177891e-07
+    ## 20 carrierWN -0.6755483290 0.35552077  -1.90016556 5.741140e-02
+    ## 21 originJFK  0.0159193152 0.02450480   0.64964082 5.159243e-01
+    ## 22 originLGA -0.0004988919 0.02360819  -0.02113215 9.831402e-01
+    ## 23   destBOS  1.0268517652 0.87317920   1.17599201 2.395981e-01
+    ## 24   destCLT  0.2497710196 0.20867090   1.19696144 2.313216e-01
+    ## 25   destFLL  0.0801443602 0.22056250   0.36336350 7.163334e-01
+    ## 26   destLAX  0.0900339902 0.75152570   0.11980161 9.046403e-01
+    ## 27   destMCO  0.2766275451 0.14206119   1.94724217 5.150571e-02
+    ## 28   destMIA  0.1775403160 0.23336126   0.76079600 4.467789e-01
+    ## 29   destORD  0.3482461064 0.04526665   7.69321623 1.434817e-14
+    ## 30   destSFO -0.0233446074 0.77861152  -0.02998236 9.760811e-01
+    ## 31  distance  0.2460109986 0.63562120   0.38704027 6.987264e-01
+    ## 32    hour11  0.1612049040 0.05126425   3.14458732 1.663213e-03
+    ## 33    hour12 -0.0946158923 0.04664866  -2.02826591 4.253312e-02
+    ## 34    hour13 -0.1892946760 0.04651283  -4.06973016 4.706762e-05
+    ## 35    hour14 -0.2783550624 0.04646561  -5.99056104 2.091184e-09
+    ## 36    hour15 -0.5551664734 0.04390630 -12.64434581 1.202210e-36
+    ## 37    hour16 -0.4939688949 0.04587315 -10.76814937 4.866853e-27
+    ## 38    hour17 -0.6546981164 0.04387881 -14.92059851 2.420921e-50
+    ## 39    hour18 -0.7859509056 0.04534136 -17.33408403 2.601790e-67
+    ## 40    hour19 -0.6561791493 0.04589700 -14.29677588 2.291839e-46
+    ## 41    hour20 -0.6327271780 0.04828038 -13.10526617 3.071827e-39
+    ## 42    hour21 -0.6910989049 0.05173012 -13.35970116 1.039807e-40
+    ## 43    hour22 -0.9625246353 0.13554672  -7.10105430 1.238087e-12
+    ## 44    hour23 -1.0475888672 0.25820526  -4.05719415 4.966579e-05
+    ## 45     hour5  0.5966958924 0.11818580   5.04879503 4.446054e-07
+    ## 46     hour6  0.4440917093 0.04479257   9.91440610 3.603934e-23
+    ## 47     hour7  0.3546293264 0.04714693   7.52179076 5.403101e-14
+    ## 48     hour8  0.1822256543 0.04602372   3.95938553 7.514285e-05
+    ## 49     hour9  0.1396952039 0.04624136   3.02100144 2.519402e-03
+    ## 50     week1 -0.3626025960 0.02367485 -15.31594381 5.983695e-53
+    ## 51     week2 -0.1127457631 0.02393204  -4.71108022 2.464072e-06
+    ## 52     week3 -0.1447165691 0.02211948  -6.54249429 6.050115e-11
 
 Takes original data and suppliment with predicte data and predicted error and associate with those...????
 
@@ -621,26 +621,26 @@ head(augment(glm_unbal))
 ```
 
     ##   .rownames was_delayed month carrier origin dest distance hour week
-    ## 1         3 Not Delayed     1      DL    LGA  ATL 6.635947    6    0
-    ## 2         4     Delayed     1      UA    EWR  ORD 6.577861    5    0
-    ## 3         5     Delayed     1      B6    EWR  FLL 6.970730    6    0
-    ## 4         6 Not Delayed     1      B6    JFK  MCO 6.850126    6    0
-    ## 5         7     Delayed     1      AA    LGA  ORD 6.597146    6    0
-    ## 6         8     Delayed     1      UA    JFK  LAX 7.813996    6    0
+    ## 1         1     Delayed     1      AA    JFK  MIA 6.993015    5    0
+    ## 2         3     Delayed     1      UA    EWR  ORD 6.577861    5    0
+    ## 3         5 Not Delayed     1      B6    JFK  MCO 6.850126    6    0
+    ## 4         6     Delayed     1      AA    LGA  ORD 6.597146    6    0
+    ## 5        10 Not Delayed     1      B6    JFK  BOS 5.231109    5    0
+    ## 6        12 Not Delayed     1      B6    LGA  FLL 6.981006    6    0
     ##    .fitted    .se.fit     .resid         .hat   .sigma      .cooksd
-    ## 1 1.616654 0.04878218  0.6018679 0.0003289257 1.083699 1.256829e-06
-    ## 2 1.795051 0.12095496 -1.9741997 0.0017872322 1.083680 2.076406e-04
-    ## 3 1.252057 0.05048571 -1.7340867 0.0004407073 1.083685 2.966820e-05
-    ## 4 1.459562 0.04912918  0.6463950 0.0003692665 1.083699 1.651117e-06
-    ## 5 1.886591 0.05042784 -2.0138187 0.0002906771 1.083679 3.689743e-05
-    ## 6 1.701311 0.05196149 -1.9333362 0.0003523159 1.083681 3.716249e-05
+    ## 1 2.058619 0.11844636 -2.0874565 0.0014081969 1.081998 2.127801e-04
+    ## 2 1.843474 0.12016352 -1.9951935 0.0017034046 1.082000 2.076853e-04
+    ## 3 1.469285 0.04930938  0.6435638 0.0003697285 1.082020 1.637187e-06
+    ## 4 1.962914 0.05088100 -2.0466245 0.0002795614 1.081999 3.830007e-05
+    ## 5 1.973818 0.12349229  0.5100691 0.0016333193 1.082021 4.377936e-06
+    ## 6 1.288582 0.05107913  0.6978034 0.0004419695 1.082019 2.345033e-06
     ##   .std.resid
-    ## 1  0.6019669
-    ## 2 -1.9759663
-    ## 3 -1.7344689
-    ## 4  0.6465144
-    ## 5 -2.0141114
-    ## 6 -1.9336769
+    ## 1 -2.0889278
+    ## 2 -1.9968950
+    ## 3  0.6436828
+    ## 4 -2.0469106
+    ## 5  0.5104862
+    ## 6  0.6979577
 
 Plot predictive's vs actuals
 
@@ -675,7 +675,7 @@ test_scored %>%
   geom_vline(aes(xintercept=0))
 ```
 
-    ## Warning: Removed 61871 rows containing non-finite values (stat_density).
+    ## Warning: Removed 61730 rows containing non-finite values (stat_density).
 
 ![](README_files/figure-markdown_github/unnamed-chunk-20-1.png)
 
@@ -705,8 +705,8 @@ test_scored %>%
 
     ##              Truth
     ## Prediction    Delayed Not Delayed
-    ##   Delayed        1970        1444
-    ##   Not Delayed    9584       23361
+    ##   Delayed        1995        1624
+    ##   Not Delayed    9631       23264
 
 ``` r
 test_scored %>% 
@@ -715,4 +715,432 @@ test_scored %>%
   accuracy(was_delayed, glm_unbal_class)
 ```
 
-    ## [1] 0.6966913
+    ## [1] 0.6917621
+
+### A glmnet for feature selection
+
+Use regularization to smooth results by modifying coefficients of variables.
+
+``` r
+library(glmnetUtils)
+
+# what scaling values, how good the models are as a result.
+glmnet_unbal <- glmnet(was_delayed~.,
+                       train_prep1,
+                       family="binomial",
+                       alpha = 0.5,  # some l1 and ome l2
+                       intercept = FALSE)
+
+glmnet_unbal
+```
+
+    ## Call:
+    ## glmnet.formula(formula = was_delayed ~ ., data = train_prep1, 
+    ##     alpha = 0.5, family = "binomial", intercept = FALSE)
+    ## 
+    ## Model fitting options:
+    ##     Sparse model matrix: FALSE
+    ##     Use model.frame: FALSE
+    ##     Alpha: 0.5
+    ##     Lambda summary:
+    ##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+    ## 0.000839 0.006654 0.052744 0.413757 0.417870 3.308900
+
+``` r
+glance(glmnet_unbal) # returns key metrics of the models fit 
+```
+
+    ##    nulldev npasses
+    ## 1 117794.8     425
+
+How many variables in the model at different levels of regularization?
+
+``` r
+# scale of the coeff at each of the points
+plot(glmnet_unbal, label = TRUE)  
+```
+
+![](README_files/figure-markdown_github/unnamed-chunk-25-1.png)
+
+What level of variance if explained at each step?
+
+``` r
+library(glmnetUtils)
+set.seed(1050104) # reproduce random
+glmnet_unbal_cv <- cv.glmnet(was_delayed~.,
+                             train_prep1,
+                             family="binomial",  #distribution family
+                             alpha = 0.5)
+```
+
+How different weights perform?
+
+``` r
+plot(glmnet_unbal_cv)
+```
+
+![](README_files/figure-markdown_github/unnamed-chunk-27-1.png)
+
+``` r
+# least peanilized, variation, 
+```
+
+Exctract coeff
+
+``` r
+coef(glmnet_unbal_cv, s = "lambda.min")
+```
+
+    ## 161 x 1 sparse Matrix of class "dgCMatrix"
+    ##                         1
+    ## (Intercept)  0.7774299194
+    ## month1       0.0782931067
+    ## month10      0.4388613987
+    ## month11      0.2977731358
+    ## month12     -0.5545176095
+    ## month2      -0.0498026775
+    ## month3       0.0381626129
+    ## month4      -0.2407407884
+    ## month5       0.1836635660
+    ## month6      -0.3480521121
+    ## month7      -0.4013728335
+    ## month8      -0.0500030099
+    ## month9       0.7311419218
+    ## carrier9E   -0.1369268377
+    ## carrierAA    0.2565835001
+    ## carrierAS    .           
+    ## carrierB6   -0.2275587422
+    ## carrierDL    0.2880007677
+    ## carrierEV   -0.4102112684
+    ## carrierF9    .           
+    ## carrierFL    .           
+    ## carrierHA    .           
+    ## carrierMQ   -0.4529155907
+    ## carrierOO    .           
+    ## carrierUA    .           
+    ## carrierUS    0.1849305606
+    ## carrierVX    .           
+    ## carrierWN   -0.7386260443
+    ## carrierYV    .           
+    ## originEWR   -0.0028071413
+    ## originJFK    0.0081146716
+    ## originLGA    .           
+    ## destABQ      .           
+    ## destACK      .           
+    ## destALB      .           
+    ## destANC      .           
+    ## destATL     -0.2674516916
+    ## destAUS      .           
+    ## destAVL      .           
+    ## destBDL      .           
+    ## destBGR      .           
+    ## destBHM      .           
+    ## destBNA      .           
+    ## destBOS      0.3960261912
+    ## destBQN      .           
+    ## destBTV      .           
+    ## destBUF      .           
+    ## destBUR      .           
+    ## destBWI      .           
+    ## destBZN      .           
+    ## destCAE      .           
+    ## destCAK      .           
+    ## destCHO      .           
+    ## destCHS      .           
+    ## destCLE      .           
+    ## destCLT     -0.0932316649
+    ## destCMH      .           
+    ## destCRW      .           
+    ## destCVG      .           
+    ## destDAY      .           
+    ## destDCA      .           
+    ## destDEN      .           
+    ## destDFW      .           
+    ## destDSM      .           
+    ## destDTW      .           
+    ## destEGE      .           
+    ## destEYW      .           
+    ## destFLL     -0.1142818748
+    ## destGRR      .           
+    ## destGSO      .           
+    ## destGSP      .           
+    ## destHDN      .           
+    ## destHNL      .           
+    ## destHOU      .           
+    ## destIAD      .           
+    ## destIAH      .           
+    ## destILM      .           
+    ## destIND      .           
+    ## destJAC      .           
+    ## destJAX      .           
+    ## destLAS      .           
+    ## destLAX      0.0918373371
+    ## destLGA      .           
+    ## destLGB      .           
+    ## destMCI      .           
+    ## destMCO      0.0382350975
+    ## destMDW      .           
+    ## destMEM      .           
+    ## destMHT      .           
+    ## destMIA     -0.0009173747
+    ## destMKE      .           
+    ## destMSN      .           
+    ## destMSP      .           
+    ## destMSY      .           
+    ## destMTJ      .           
+    ## destMVY      .           
+    ## destMYR      .           
+    ## destOAK      .           
+    ## destOKC      .           
+    ## destOMA      .           
+    ## destORD      0.0461491039
+    ## destORF      .           
+    ## destPBI      .           
+    ## destPDX      .           
+    ## destPHL      .           
+    ## destPHX      .           
+    ## destPIT      .           
+    ## destPSE      .           
+    ## destPSP      .           
+    ## destPVD      .           
+    ## destPWM      .           
+    ## destRDU      .           
+    ## destRIC      .           
+    ## destROC      .           
+    ## destRSW      .           
+    ## destSAN      .           
+    ## destSAT      .           
+    ## destSAV      .           
+    ## destSBN      .           
+    ## destSDF      .           
+    ## destSEA      .           
+    ## destSFO      .           
+    ## destSJC      .           
+    ## destSJU      .           
+    ## destSLC      .           
+    ## destSMF      .           
+    ## destSNA      .           
+    ## destSRQ      .           
+    ## destSTL      .           
+    ## destSTT      .           
+    ## destSYR      .           
+    ## destTPA      .           
+    ## destTUL      .           
+    ## destTVC      .           
+    ## destTYS      .           
+    ## destXNA      .           
+    ## distance     .           
+    ## hour1        .           
+    ## hour10       0.1853701233
+    ## hour11       0.3453276343
+    ## hour12       0.0922059204
+    ## hour13       .           
+    ## hour14      -0.0753208634
+    ## hour15      -0.3477577617
+    ## hour16      -0.2875131040
+    ## hour17      -0.4481409764
+    ## hour18      -0.5783672972
+    ## hour19      -0.4499893706
+    ## hour20      -0.4251299178
+    ## hour21      -0.4839338176
+    ## hour22      -0.7307594463
+    ## hour23      -0.7876195696
+    ## hour5        0.7428940549
+    ## hour6        0.6246338593
+    ## hour7        0.5402520832
+    ## hour8        0.3663032852
+    ## hour9        0.3227636105
+    ## week0        0.1361292628
+    ## week1       -0.2156201357
+    ## week2        0.0245869957
+    ## week3        .
+
+``` r
+#neg. values prediction of how delayed
+#pos. values prediction of how not delayed it will be
+```
+
+``` r
+coef(glmnet_unbal_cv, s="lambda.min") #returns the best model
+```
+
+    ## 161 x 1 sparse Matrix of class "dgCMatrix"
+    ##                         1
+    ## (Intercept)  0.7774299194
+    ## month1       0.0782931067
+    ## month10      0.4388613987
+    ## month11      0.2977731358
+    ## month12     -0.5545176095
+    ## month2      -0.0498026775
+    ## month3       0.0381626129
+    ## month4      -0.2407407884
+    ## month5       0.1836635660
+    ## month6      -0.3480521121
+    ## month7      -0.4013728335
+    ## month8      -0.0500030099
+    ## month9       0.7311419218
+    ## carrier9E   -0.1369268377
+    ## carrierAA    0.2565835001
+    ## carrierAS    .           
+    ## carrierB6   -0.2275587422
+    ## carrierDL    0.2880007677
+    ## carrierEV   -0.4102112684
+    ## carrierF9    .           
+    ## carrierFL    .           
+    ## carrierHA    .           
+    ## carrierMQ   -0.4529155907
+    ## carrierOO    .           
+    ## carrierUA    .           
+    ## carrierUS    0.1849305606
+    ## carrierVX    .           
+    ## carrierWN   -0.7386260443
+    ## carrierYV    .           
+    ## originEWR   -0.0028071413
+    ## originJFK    0.0081146716
+    ## originLGA    .           
+    ## destABQ      .           
+    ## destACK      .           
+    ## destALB      .           
+    ## destANC      .           
+    ## destATL     -0.2674516916
+    ## destAUS      .           
+    ## destAVL      .           
+    ## destBDL      .           
+    ## destBGR      .           
+    ## destBHM      .           
+    ## destBNA      .           
+    ## destBOS      0.3960261912
+    ## destBQN      .           
+    ## destBTV      .           
+    ## destBUF      .           
+    ## destBUR      .           
+    ## destBWI      .           
+    ## destBZN      .           
+    ## destCAE      .           
+    ## destCAK      .           
+    ## destCHO      .           
+    ## destCHS      .           
+    ## destCLE      .           
+    ## destCLT     -0.0932316649
+    ## destCMH      .           
+    ## destCRW      .           
+    ## destCVG      .           
+    ## destDAY      .           
+    ## destDCA      .           
+    ## destDEN      .           
+    ## destDFW      .           
+    ## destDSM      .           
+    ## destDTW      .           
+    ## destEGE      .           
+    ## destEYW      .           
+    ## destFLL     -0.1142818748
+    ## destGRR      .           
+    ## destGSO      .           
+    ## destGSP      .           
+    ## destHDN      .           
+    ## destHNL      .           
+    ## destHOU      .           
+    ## destIAD      .           
+    ## destIAH      .           
+    ## destILM      .           
+    ## destIND      .           
+    ## destJAC      .           
+    ## destJAX      .           
+    ## destLAS      .           
+    ## destLAX      0.0918373371
+    ## destLGA      .           
+    ## destLGB      .           
+    ## destMCI      .           
+    ## destMCO      0.0382350975
+    ## destMDW      .           
+    ## destMEM      .           
+    ## destMHT      .           
+    ## destMIA     -0.0009173747
+    ## destMKE      .           
+    ## destMSN      .           
+    ## destMSP      .           
+    ## destMSY      .           
+    ## destMTJ      .           
+    ## destMVY      .           
+    ## destMYR      .           
+    ## destOAK      .           
+    ## destOKC      .           
+    ## destOMA      .           
+    ## destORD      0.0461491039
+    ## destORF      .           
+    ## destPBI      .           
+    ## destPDX      .           
+    ## destPHL      .           
+    ## destPHX      .           
+    ## destPIT      .           
+    ## destPSE      .           
+    ## destPSP      .           
+    ## destPVD      .           
+    ## destPWM      .           
+    ## destRDU      .           
+    ## destRIC      .           
+    ## destROC      .           
+    ## destRSW      .           
+    ## destSAN      .           
+    ## destSAT      .           
+    ## destSAV      .           
+    ## destSBN      .           
+    ## destSDF      .           
+    ## destSEA      .           
+    ## destSFO      .           
+    ## destSJC      .           
+    ## destSJU      .           
+    ## destSLC      .           
+    ## destSMF      .           
+    ## destSNA      .           
+    ## destSRQ      .           
+    ## destSTL      .           
+    ## destSTT      .           
+    ## destSYR      .           
+    ## destTPA      .           
+    ## destTUL      .           
+    ## destTVC      .           
+    ## destTYS      .           
+    ## destXNA      .           
+    ## distance     .           
+    ## hour1        .           
+    ## hour10       0.1853701233
+    ## hour11       0.3453276343
+    ## hour12       0.0922059204
+    ## hour13       .           
+    ## hour14      -0.0753208634
+    ## hour15      -0.3477577617
+    ## hour16      -0.2875131040
+    ## hour17      -0.4481409764
+    ## hour18      -0.5783672972
+    ## hour19      -0.4499893706
+    ## hour20      -0.4251299178
+    ## hour21      -0.4839338176
+    ## hour22      -0.7307594463
+    ## hour23      -0.7876195696
+    ## hour5        0.7428940549
+    ## hour6        0.6246338593
+    ## hour7        0.5402520832
+    ## hour8        0.3663032852
+    ## hour9        0.3227636105
+    ## week0        0.1361292628
+    ## week1       -0.2156201357
+    ## week2        0.0245869957
+    ## week3        .
+
+``` r
+test_scored$glmnet_unbal_cv <- as.vector(predict(glmnet_unbal_cv, 
+                                                 test_scored,
+                                                 na.action = na.pass))
+```
+
+``` r
+test_scored %>% 
+  ggplot(aes(x=glmnet_unbal_cv, group=was_delayed, fill= was_delayed)) + 
+  geom_density(alpha=0.5) + 
+  geom_vline(aes(xintercept=0))
+```
+
+    ## Warning: Removed 61730 rows containing non-finite values (stat_density).
+
+![](README_files/figure-markdown_github/unnamed-chunk-31-1.png)
